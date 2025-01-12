@@ -1,17 +1,16 @@
 const express = require('express');
-const {
-  getResumo,
-  getTopClientes,
-  getEstoqueProdutos,
-  getUltimosPedidos,
-} = require('../controllers/dashboardController.js');
+const { createPedido, getPedidos, updatePedidoStatus } = require('../controllers/pedidoController.js');
 
 const router = express.Router();
 
-router.get('/resumo', getResumo);
-router.get('/clientes/top', getTopClientes);
-router.get('/produtos/estoque', getEstoqueProdutos);
-router.get('/pedidos/ultimos', getUltimosPedidos);
+// Rota para criar um pedido
+router.post('/', createPedido);
+
+// Rota para listar pedidos
+router.get('/', getPedidos);
+
+// Rota para atualizar o status de um pedido
+router.put('/:id/status', updatePedidoStatus); 
 
 // Exportando o router
 module.exports = router;
