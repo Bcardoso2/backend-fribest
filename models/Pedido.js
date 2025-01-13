@@ -1,6 +1,5 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database.js');
-const Cliente = require('./Cliente.js'); // Importa o modelo Cliente
 
 const Pedido = sequelize.define(
   'Pedido',
@@ -34,7 +33,5 @@ const Pedido = sequelize.define(
   }
 );
 
-// Definindo a associação com o modelo Cliente
-Pedido.belongsTo(Cliente, { foreignKey: 'cliente_id', as: 'cliente' });
-
+// Exportando o modelo Pedido
 module.exports = Pedido;
