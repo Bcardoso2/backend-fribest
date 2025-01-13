@@ -18,17 +18,33 @@ const getResumo = async (req, res) => {
 const getTopClientes = async (req, res) => {
   try {
     const clientes = await Pedido.findAll({
-      attributes: ['cliente_id', [sequelize.fn('SUM', sequelize.col('total')), 'valorComprado']],
+      attributes: [
+        'cliente_id',
+        [sequelize.fn('SUM', sequelize.col('total')), 'valorComprado']
+      ],
       group: ['cliente_id'],
-      include: [{ model: Cliente, as: 'cliente', attributes: ['nome'] }],
-      order: [[sequelize.literal('valorComprado'), 'DESC']],
-      limit: 5,
+      include: [{
+        model: Cliente,
+        as: 'cliente', // Alias para o modelo Cliente
+        attributes: ['nome']
+      }],
+      order: [[sequelize.fn('SUM', sequelize.col('total')), 'DESC']], // Ordena pela soma do total
+      limit: 5
     });
-    res.json(clientes);
+
+    // Formatação da resposta
+    const formattedClientes = clientes.map(cliente => ({
+      nome: cliente.cliente.nome,
+      valorComprado: cliente.dataValues.valorComprado,
+    }));
+
+    res.json(formattedClientes);
   } catch (error) {
+    console.error('Erro ao buscar clientes:', error);
     res.status(500).json({ error: 'Erro ao buscar clientes.' });
   }
 };
+
 
 // Estoque de produtos
 const getEstoqueProdutos = async (req, res) => {
