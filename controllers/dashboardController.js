@@ -1,7 +1,7 @@
 const Pedido = require('../models/Pedido.js');
 const Cliente = require('../models/Cliente.js');
 const Produto = require('../models/ProdutoModels.js');
-const { sequelize } = require('sequelize');
+const sequelize = require('../config/database.js');  // Importando a instância de sequelize
 
 // Faturamento e despesas
 const getResumo = async (req, res) => {
@@ -20,19 +20,19 @@ const getTopClientes = async (req, res) => {
     const clientes = await Pedido.findAll({
       attributes: [
         'cliente_id',
-        [sequelize.fn('SUM', sequelize.col('total')), 'valorComprado']
+        [sequelize.fn('SUM', sequelize.col('total')), 'valorComprado'] // Usando a instância de sequelize importada
       ],
       group: ['cliente_id'],
       include: [{
         model: Cliente,
-        as: 'cliente', // Alias para o modelo Cliente
+        as: 'cliente', // Alias correto da associação
         attributes: ['nome']
       }],
-      order: [[sequelize.fn('SUM', sequelize.col('total')), 'DESC']], // Ordena pela soma do total
+      order: [[sequelize.fn('SUM', sequelize.col('total')), 'DESC']], // Ordenando pela soma
       limit: 5
     });
 
-    // Formatação da resposta
+    // Formatação dos dados para retorno ao frontend
     const formattedClientes = clientes.map(cliente => ({
       nome: cliente.cliente.nome,
       valorComprado: cliente.dataValues.valorComprado,
@@ -40,11 +40,10 @@ const getTopClientes = async (req, res) => {
 
     res.json(formattedClientes);
   } catch (error) {
-    console.error('Erro ao buscar clientes:', error);
-    res.status(500).json({ error: 'Erro ao buscar clientes.' });
+    console.error('Erro ao buscar clientes:', error);  // Log do erro detalhado
+    res.status(500).json({ error: 'Erro ao buscar clientes.', message: error.message });
   }
 };
-
 
 // Estoque de produtos
 const getEstoqueProdutos = async (req, res) => {
