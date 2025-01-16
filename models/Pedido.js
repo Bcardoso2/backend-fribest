@@ -26,6 +26,10 @@ const Pedido = sequelize.define(
       defaultValue: 'Aguardando',
       allowNull: false,
     },
+    valor_por_kg: {
+      type: DataTypes.DECIMAL(10, 2), // Adicionado o campo valor_por_kg
+      allowNull: false,
+    },
   },
   {
     tableName: 'pedidos',
