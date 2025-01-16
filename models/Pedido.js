@@ -30,6 +30,10 @@ const Pedido = sequelize.define(
       type: DataTypes.DECIMAL(10, 2), // Adicionado o campo valor_por_kg
       allowNull: false,
     },
+    observacao: {
+      type: DataTypes.STRING, // Adicionado o campo observacao
+      allowNull: true, // Não obrigatório
+    },
   },
   {
     tableName: 'pedidos',
