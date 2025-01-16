@@ -1,16 +1,27 @@
 const Pedido = require('../models/Pedido.js');
 const PedidoProduto = require('../models/PedidoProduto.js');
-const Produto = require('../models/ProdutoModels.js'); // Certifique-se de importar o modelo de Produto
+const Produto = require('../models/ProdutoModels.js');
 
 // Função para criar um pedido
 const createPedido = async (req, res) => {
-  const { cliente_id, funcionario_id, produtos } = req.body;
+  const { cliente_id, funcionario_id, produtos, valor_por_kg, observacao } = req.body;
 
   try {
+    // Validações básicas
+    if (!cliente_id || !funcionario_id || !produtos || produtos.length === 0 || !valor_por_kg) {
+      return res.status(400).json({ error: 'Dados inválidos ou incompletos.' });
+    }
+
+    if (isNaN(valor_por_kg) || valor_por_kg <= 0) {
+      return res.status(400).json({ error: 'O valor por kg deve ser um número positivo.' });
+    }
+
     // Cria o pedido
     const pedido = await Pedido.create({
       cliente_id,
       funcionario_id,
+      valor_por_kg, // Inclui o valor por kg
+      observacao, // Inclui a observação
       data_pedido: new Date(),
     });
 
@@ -113,5 +124,5 @@ const updatePedidoStatus = async (req, res) => {
 module.exports = {
   createPedido,
   getPedidos,
-  updatePedidoStatus
+  updatePedidoStatus,
 };
