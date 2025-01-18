@@ -39,13 +39,7 @@ const createPedido = async (req, res) => {
             .json({ error: `Produto com ID ${produto.produto_id} não encontrado.` });
         }
 
-        if (produtoDb.estoque < produto.quantidade) {
-          return res
-            .status(400)
-            .json({ error: `Estoque insuficiente para o produto ${produtoDb.nome}.` });
-        }
-
-        // Decrementa o estoque do produto
+        // Remove a verificação de estoque para permitir valores negativos
         produtoDb.estoque -= produto.quantidade;
         await produtoDb.save();
 
