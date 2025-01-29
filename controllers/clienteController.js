@@ -10,7 +10,11 @@ const getAllClientes = async (req, res) => {
 
     res.json(clientes);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao buscar clientes' });
+    console.error('Erro ao buscar clientes:', error); // Log do erro
+    res.status(500).json({
+      error: 'Erro ao buscar clientes',
+      details: error.message, // Detalhes adicionais para ajudar na depuração
+    });
   }
 };
 
@@ -19,7 +23,11 @@ const createCliente = async (req, res) => {
     const cliente = await Cliente.create(req.body);
     res.status(201).json(cliente);
   } catch (error) {
-    res.status(500).json({ error: 'Erro ao criar cliente' });
+    console.error('Erro ao criar cliente:', error); // Log do erro
+    res.status(500).json({
+      error: 'Erro ao criar cliente',
+      details: error.message, // Detalhes adicionais para ajudar na depuração
+    });
   }
 };
 
