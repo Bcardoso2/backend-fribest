@@ -24,9 +24,16 @@ const createCliente = async (req, res) => {
     res.status(201).json(cliente);
   } catch (error) {
     console.error('Erro ao criar cliente:', error); // Log do erro
+
+    // Logando detalhes do erro de validação
+    if (error.name === 'SequelizeValidationError') {
+      const validationErrors = error.errors.map(e => e.message);
+      console.error('Erros de validação:', validationErrors);
+    }
+
     res.status(500).json({
       error: 'Erro ao criar cliente',
-      details: error.message, // Detalhes adicionais para ajudar na depuração
+      details: error.name === 'SequelizeValidationError' ? validationErrors : error.message, // Detalhes específicos para erro de validação
     });
   }
 };
