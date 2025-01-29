@@ -14,6 +14,12 @@ const Cliente = sequelize.define('Cliente', {
     unique: true,
     comment: 'CPF do cliente, deve ser único se preenchido',
   },
+  cnpj: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    unique: true,
+    comment: 'CNPJ do cliente, deve ser único se preenchido',
+  },
   data_criacao: {
     type: DataTypes.DATE,
     allowNull: false,
