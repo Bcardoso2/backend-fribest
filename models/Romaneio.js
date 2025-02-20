@@ -13,10 +13,7 @@ Romaneio.init(
     cliente_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      references: {
-        model: "Clientes",
-        key: "id",
-      },
+      references: null, // ✅ Removido para evitar duplicação da FK
     },
     status: {
       type: DataTypes.STRING(50),
@@ -29,16 +26,13 @@ Romaneio.init(
     funcionario_id: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      references: {
-        model: "Funcionarios",
-        key: "id",
-      },
+      references: null, // ✅ Removido para evitar duplicação da FK
     },
   },
   {
-    sequelize, // Conexão com o banco
+    sequelize,
     modelName: "Romaneio",
-    tableName: "Romaneios",
+    tableName: "romaneios",
     timestamps: true,
   }
 );
